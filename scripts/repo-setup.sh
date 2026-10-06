@@ -22,28 +22,15 @@ label in-progress  "fbca04" "作業中"
 label needs-input  "d876e3" "人間の判断待ち"
 label blocked      "b60205" "先行 Issue 待ち"
 
-# マージの設定。squash のみ、auto-merge 可、マージ後にブランチ削除。
-gh api -X PATCH "$R" \
-  -F allow_squash_merge=true -F allow_merge_commit=false -F allow_rebase_merge=false \
-  -F allow_auto_merge=true -F delete_branch_on_merge=true >/dev/null
-echo "merge: squash のみ / auto-merge 有効 / マージ後ブランチ削除"
+# マージの設定とブランチ保護は、Claude のセッションからは書き込めない (GitHub 連携のプロキシが
+# リポジトリ設定の変更を拒否する)。人間が GitHub の Settings でやる。docs/setup.md の 3 を参照。
+cat <<'MSG'
 
-# ブランチ保護。CI (check) を必須にし、直 push を禁止する。人間の承認は要求しない。
-# 非公開リポジトリでは GitHub Pro が無いと 403 になる。その場合は運用ルール (AGENTS.md) だけで守る。
-if gh api -X PUT "$R/branches/main/protection" --input - >/dev/null 2>&1 <<'JSON'
-{
-  "required_status_checks": { "strict": true, "contexts": ["check"] },
-  "enforce_admins": true,
-  "required_pull_request_reviews": null,
-  "restrictions": null,
-  "allow_force_pushes": false,
-  "allow_deletions": false
-}
-JSON
-then
-  echo "protection: main は PR 必須 / CI 必須 / force push 禁止"
-else
-  echo "protection: 設定できませんでした (非公開リポジトリで GitHub Pro が無い場合は仕様)。AGENTS.md のルールで直 push を避けます" >&2
-fi
-
-echo "完了"
+以下は GitHub の Settings で人間が設定してください (Claude からは変更できません):
+  General → Pull Requests: Allow squash merging だけ ON、Allow auto-merge ON、
+                           Automatically delete head branches ON
+  General → Template repository: テンプレートとして使うリポジトリだけ ON
+  Branches → Add rule (main): Require a pull request、Require status checks (check)、
+                              Do not allow bypassing the above settings
+完了
+MSG
