@@ -1,0 +1,16 @@
+name: CI
+
+# クラウドセッションの hook と同じコマンドだけを呼ぶ。言語固有のことは Makefile 側に置く。
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: make setup
+      - run: make check
+      - run: make build
