@@ -21,7 +21,7 @@ Claude が `scripts/repo-setup.sh` を実行してラベルを入れる。
 
 - General → Pull Requests: **Allow squash merging** だけ ON、**Allow auto-merge** ON、**Automatically delete head branches** ON
 - Branches → Add branch ruleset または Add rule (`main`): **Require a pull request before merging** (承認数は 0 でよい)、**Require status checks to pass** で `check` を選ぶ、**Do not allow bypassing**
-  - 非公開リポジトリでは GitHub Pro が要る。無くても運用ルールで直 push しないので動く
+  - 非公開リポジトリでは GitHub Pro が要る (無料プランでは保護が効かない)。その場合も `.claude/hooks/pre-push-check.sh` が Claude からの main への push を止めるので運用は成立する。守れないのは人間が手で main に push する場合だけ
 
 ## 4. 自動レビューを入れる
 
