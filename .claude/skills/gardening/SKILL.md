@@ -23,7 +23,7 @@ gh api "$R/branches?per_page=100" --jq '.[].name'
 
 - `in-progress` のまま 6 時間以上更新が無い Issue: 「放置されたため ready に戻します」とコメントし、`in-progress` を外して `ready` を付ける。
 - 開いている PR: CI が緑で未解決スレッドが無ければ squash でマージする。CI が赤で 24 時間以上動きが無ければ、Issue に `needs-input` を付けて PR にその旨をコメントする。
-- PR の無いブランチで main にマージ済み、または 7 日以上更新の無いもの: 削除する (`git push origin --delete <name>`。refs API の DELETE はプロキシに拒否される)。
+- ブランチの削除はセッションからはできない (API も `git push --delete` もプロキシが 403 を返す)。マージ済みブランチは GitHub の「Automatically delete head branches」に任せる。PR の無いまま 7 日以上更新の無いブランチは、報告に名前を挙げるだけにする。
 - `needs-input` が 14 日以上放置: 何を聞いているかを 3 行に要約してコメントし直す (人間がスマホで見て答えられるように)。
 
 ## 2. レビュー指摘の昇格
