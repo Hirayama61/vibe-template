@@ -10,7 +10,7 @@
 不具合 (bug) ───┼→ ready な Issue → ブランチ → PR → 自動レビュー → CI 緑 → マージ → Issue が閉じる
 ```
 
-main への直 push は禁止。すべて PR を経由する。
+main への直 push は禁止。すべて PR を経由する。Claude のセッションからの main への push は hook が止める (無料プランの非公開リポジトリでは GitHub 側のブランチ保護が効かないため)。
 
 ## Issue
 

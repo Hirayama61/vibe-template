@@ -17,7 +17,7 @@ Routine の本文は `/work-issue` や `/gardening` の 1 行だけ。手順の�
 ## Hook
 
 - SessionStart: クラウドセッションでだけ `make setup` を走らせる。
-- PreToolUse (Bash): `git push` の前に `make check` を走らせ、失敗したら push を止める。
+- PreToolUse (Bash): `git push` の前に、push 先が main なら拒否し、続けて `make check` を走らせて失敗したら push を止める。
 
 ## 初期設定
 
