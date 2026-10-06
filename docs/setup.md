@@ -12,10 +12,16 @@ GitHub でこのテンプレートの **Use this template** → **Create a new r
 Claude アプリ → 設定 → GitHub 連携で、作ったリポジトリを Claude GitHub App の対象に加える。
 https://claude.ai/connect-github から辿れる。
 
-## 3. 初期設定をさせる
+## 3. 初期設定をする
 
 作ったリポジトリを選んで Claude Code のセッションを開き、「初期設定をして」と送る。
-Claude が `scripts/repo-setup.sh` を実行して、ラベル・auto-merge・ブランチ保護を入れる。
+Claude が `scripts/repo-setup.sh` を実行してラベルを入れる。
+
+リポジトリの設定は Claude からは変更できない (GitHub 連携がリポジトリ設定の書き込みを拒否する) ので、GitHub の Settings で人間がやる。2 分で終わる。
+
+- General → Pull Requests: **Allow squash merging** だけ ON、**Allow auto-merge** ON、**Automatically delete head branches** ON
+- Branches → Add branch ruleset または Add rule (`main`): **Require a pull request before merging** (承認数は 0 でよい)、**Require status checks to pass** で `check` を選ぶ、**Do not allow bypassing**
+  - 非公開リポジトリでは GitHub Pro が要る。無くても運用ルールで直 push しないので動く
 
 ## 4. 自動レビューを入れる
 
